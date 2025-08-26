@@ -59,10 +59,10 @@ WORKDIR $HOME
 # Copy ZSH configuration files
 COPY --chown=$USER:$USER docker/zsh/.zshrc $HOME/.zshrc
 COPY --chown=$USER:$USER docker/zsh/.zsh_aliases $HOME/.zsh_aliases
-COPY --chown=$USER:$USER docker/zsh/.zinit_config $HOME/.zinit_config
-COPY --chown=$USER:$USER docker/zsh/starship.toml $HOME/.config/starship.toml
 
-# Copy mise configuration
+# Copy other configuration files
+COPY --chown=$USER:$USER docker/zinit/.zinit_config $HOME/.zinit_config
+COPY --chown=$USER:$USER docker/zinit/starship.toml $HOME/.config/starship.toml
 COPY --chown=$USER:$USER docker/mise/.mise.toml $HOME/.config/mise/config.toml
 
 # Create workspace directory as root first
