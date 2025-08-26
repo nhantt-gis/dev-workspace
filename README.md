@@ -33,9 +33,6 @@ A modern Docker-based development environment with Oracle Linux 9 and ZSH best p
 # Clone or download this repository
 git clone <repository-url>
 cd setup-zsh
-
-# Copy environment template
-cp .env.example .env
 ```
 
 ### 2. Start the Environment
@@ -86,7 +83,6 @@ task clean     # Clean up containers and images
 │       └── starship.toml      # Starship prompt configuration
 ├── docker-compose.yml         # Container orchestration
 ├── Taskfile.yml              # Task runner configuration
-├── .env.example              # Environment variables template
 ├── .gitignore                # Git ignore rules
 ├── .dockerignore             # Docker ignore rules
 └── README.md                 # This file
@@ -133,27 +129,6 @@ task clean     # Clean up containers and images
 - `sysinfo` - Show detailed system information
 
 ## Customization
-
-### Environment Variables
-
-Copy `.env.example` to `.env` and customize:
-
-```bash
-# Container Settings
-CONTAINER_NAME=zsh-devenv
-COMPOSE_PROJECT_NAME=setup-zsh
-
-# User Settings
-DEV_USER=devuser
-DEV_UID=1000
-DEV_GID=1000
-
-# Development Ports
-WEB_PORT=3000
-API_PORT=8000
-ADMIN_PORT=8080
-DEV_PORT=9000
-```
 
 ### Adding Custom Aliases
 
@@ -211,11 +186,6 @@ task rebuild
 ```
 
 ### Permission Issues
-
-```bash
-# Check user ID mapping in .env
-# Adjust DEV_UID and DEV_GID to match your host user
-```
 
 ### Plugin Issues
 
