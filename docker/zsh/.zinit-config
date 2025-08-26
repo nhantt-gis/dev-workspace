@@ -1,0 +1,68 @@
+# ---------- PHASE 1: Oh-My-Zsh Essential Snippets (Load First) ----------
+zinit snippet OMZP::git                   # Git aliases and functions
+zinit snippet OMZP::docker                # Docker aliases and functions
+zinit snippet OMZP::docker-compose        # Docker Compose aliases and functions
+zinit snippet OMZP::extract               # Universal archive extractor
+zinit snippet OMZP::command-not-found     # Suggest packages for missing commands
+
+# ---------- PHASE 2: Completion System (High Priority) ----------
+zinit ice wait lucid
+zinit light zsh-users/zsh-completions    # Additional completion definitions
+zinit ice wait lucid  
+zinit light Aloxaf/fzf-tab               # Replace tab completion with fzf
+
+# ---------- PHASE 3: Smart Navigation (Medium Priority) ----------
+zinit ice wait lucid from"gh-r" as"program" atload'source <(fzf --zsh)'
+zinit light junegunn/fzf                 # Fuzzy finder
+zinit ice wait lucid from"gh-r" as"program" atload'eval "$(zoxide init zsh)"'
+zinit light ajeetdsouza/zoxide           # Smart cd based on frecency
+zinit ice wait lucid
+zinit light Tarrasch/zsh-bd              # Quick parent directory navigation
+
+# ---------- PHASE 4: Enhanced UX (Medium Priority) ----------
+# zinit ice wait lucid from"gh-r" as"program" atload'eval "$(mcfly init zsh)"'
+# zinit light cantino/mcfly                               # Intelligent terminal history
+zinit ice wait lucid
+zinit light zdharma-continuum/history-search-multi-word # Advanced history search
+zinit ice wait lucid
+zinit light hlissner/zsh-autopair                       # Auto-close brackets and quotes
+zinit ice wait lucid
+zinit light MichaelAquilina/zsh-you-should-use          # Smart command suggestions
+# zinit ice depth=1
+# zinit light jeffreytse/zsh-vi-mode                      # Vim mode for Zsh
+
+# ---------- PHASE 5: Visual Enhancements (Load Late) ----------
+# zinit ice wait"1" lucid atinit"zicompinit; zicdreplay"
+# zinit light zsh-users/zsh-syntax-highlighting           # Command syntax highlighting
+# zinit ice wait"1" atload'_history_substring_search_config'
+# zinit light zsh-history-substring-search                # Search history with substring
+zinit ice wait"1" lucid atinit"zicompinit; zicdreplay"
+zinit light zdharma-continuum/fast-syntax-highlighting  # Command syntax highlighting
+zinit ice wait"1" lucid atload"_zsh_autosuggest_start" 
+zinit light zsh-users/zsh-autosuggestions               # Smart command suggestions
+
+# ---------- PHASE 6: Modern CLI Tools (Load Last) ----------
+zinit ice wait"2" lucid from"gh-r" as"program" pick"**/eza"
+zinit light eza-community/eza                           # Modern ls replacement
+zinit ice wait"2" lucid from"gh-r" as"program" pick"**/bat"
+zinit light sharkdp/bat                                 # Modern cat replacement
+zinit ice wait"2" lucid from"gh-r" as"program" pick"**/fd"
+zinit light sharkdp/fd                                  # Modern find replacement
+zinit ice wait"2" lucid from"gh-r" as"program" pick"**/rg"
+zinit light BurntSushi/ripgrep                          # Modern grep replacement
+
+# Starship for CLI colors
+zinit ice as"command" from"gh-r" \
+          atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
+          atpull"%atclone" src"init.zsh"
+zinit light starship/starship
+
+# Aliases for modern CLI tools
+alias ls="eza --group-directories-first --icons=auto"
+alias ll="eza -l --icons --header --git"
+alias la="eza -la --icons --header --git"
+alias cat="bat --paging=never --style=plain"
+alias bcat="bat"
+alias find="fd -u"
+alias grep="rg"
+alias rgrep="rg --files | rg"

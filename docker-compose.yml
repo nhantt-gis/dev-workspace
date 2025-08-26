@@ -1,0 +1,37 @@
+services:
+  devenv:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: zsh-devenv
+    hostname: devenv
+    volumes:
+      - .:/workspace
+      - zsh_history:/home/devuser/.zsh_history_data
+      - zsh_cache:/home/devuser/.cache
+      - ~/.ssh:/home/devuser/.ssh:ro
+    environment:
+      - TERM=xterm-256color
+      - COLORTERM=truecolor
+      - LANG=en_US.UTF-8
+      - LC_ALL=en_US.UTF-8
+    working_dir: /workspace
+    tty: true
+    stdin_open: true
+    command: tail -f /dev/null
+    networks:
+      - devenv-network
+    ports:
+      - "9000:9009"
+      - "3000:3009"
+      - "8000:8009"
+
+volumes:
+  zsh_history:
+    driver: local
+  zsh_cache:
+    driver: local
+
+networks:
+  devenv-network:
+    driver: bridge

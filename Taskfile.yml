@@ -1,0 +1,60 @@
+version: '3'
+
+tasks:
+  up:
+    desc: Start the development environment
+    cmds:
+      - docker compose up -d
+    
+  down:
+    desc: Stop the development environment
+    cmds:
+      - docker compose down
+    
+  build:
+    desc: Build the Docker image
+    cmds:
+      - docker compose build
+    
+  rebuild:
+    desc: Rebuild and restart the environment
+    cmds:
+      - task: down
+      - task: build
+      - task: up
+    
+  shell:
+    desc: Connect to the container shell
+    cmds:
+      - docker compose exec devenv zsh
+    
+  bash:
+    desc: Connect to the container with bash (fallback)
+    cmds:
+      - docker compose exec devenv bash
+    
+  logs:
+    desc: View container logs
+    cmds:
+      - docker compose logs -f devenv
+    
+  restart:
+    desc: Restart the development environment
+    cmds:
+      - docker compose restart devenv
+    
+  stop:
+    desc: Stop the development environment
+    cmds:
+      - docker compose stop
+    
+  status:
+    desc: Show container status
+    cmds:
+      - docker compose ps
+    
+  clean:
+    desc: Clean up containers and images
+    cmds:
+      - docker compose down -v --rmi all
+    
