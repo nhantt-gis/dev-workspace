@@ -29,8 +29,8 @@ COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Load Zinit plugin configuration
-if [[ -f ~/.zinit-config ]]; then
-    source ~/.zinit-config
+if [[ -f ~/.zinit_config ]]; then
+    source ~/.zinit_config
 fi
 
 # User configuration
@@ -102,3 +102,11 @@ fi
 if [[ -f ~/.zsh_aliases ]]; then
     source ~/.zsh_aliases
 fi
+
+# Initialize mise (runtime version manager)
+if command -v mise &> /dev/null; then
+    eval "$(mise activate zsh)"
+fi
+
+# Add local bin to PATH
+export PATH="$HOME/.local/bin:$PATH"

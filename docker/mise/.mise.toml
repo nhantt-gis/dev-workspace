@@ -1,0 +1,20 @@
+# Mise configuration for runtime version management
+# https://mise.jdx.dev/configuration.html
+
+[settings]
+experimental = true
+plugin_autoupdate_last_check_duration = "30 days"
+
+# Default tools to install
+[tools]
+# Popular runtime versions
+node = "23"
+python = "13"
+
+# Package managers
+pnpm = "10"
+poetry = "2"
+
+[env]
+MISE_EXPERIMENTAL = "1"
+MISE_LOG_LEVEL = "info"

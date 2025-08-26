@@ -7,6 +7,7 @@ A modern Docker-based development environment with Oracle Linux 9 and ZSH best p
 - **Oracle Linux 9** base image with minimal footprint
 - **ZSH with Zinit** plugin manager (fast turbo-mode loading)
 - **Starship prompt** (cross-shell, fast, and customizable)
+- **Mise runtime version manager** (modern alternative to asdf/nvm/pyenv)
 - **Modern terminal tools:**
   - eza (modern ls replacement)
   - bat (syntax highlighting cat)
@@ -68,6 +69,13 @@ task restart   # Restart the environment
 task stop      # Stop the environment
 task status    # Show container status
 task clean     # Clean up containers and images
+
+# Mise runtime management
+task mise-list        # List installed runtimes
+task mise-setup       # Setup common runtimes (Node.js, Python, Go)
+task mise-install -- node@lts    # Install specific runtime
+task mise-use -- python@3.12     # Set global runtime version
+task mise -- --help              # Run any mise command
 ```
 
 ## Directory Structure
@@ -76,13 +84,17 @@ task clean     # Clean up containers and images
 .
 ├── docker/
 │   ├── Dockerfile              # Oracle Linux 9 + ZSH + terminal tools
+│   ├── mise/
+│   │   └── .mise.toml         # Mise configuration
 │   └── zsh/
 │       ├── .zshrc             # ZSH configuration with Zinit
-│       ├── .zinit-config      # Zinit plugin configuration
+│       ├── .zinit_config      # Zinit plugin configuration
 │       ├── .zsh_aliases       # Custom aliases and functions
 │       └── starship.toml      # Starship prompt configuration
 ├── docker-compose.yml         # Container orchestration
 ├── Taskfile.yml              # Task runner configuration
+├── .tool-versions            # Mise tool versions (example)
+├── .env.example              # Environment variables template
 ├── .gitignore                # Git ignore rules
 ├── .dockerignore             # Docker ignore rules
 └── README.md                 # This file
@@ -140,7 +152,7 @@ task rebuild
 
 ### Adding More Plugins
 
-Edit `docker/zsh/.zinit-config` to add more plugins, then rebuild:
+Edit `docker/zsh/.zinit_config` to add more plugins, then rebuild:
 
 ```bash
 task rebuild
@@ -154,9 +166,66 @@ Edit `docker/zsh/starship.toml` to customize the prompt, then rebuild:
 task rebuild
 ```
 
+## Mise Runtime Management
+
+Mise is a modern runtime version manager that replaces tools like nvm, pyenv, rbenv, etc.
+
+### Quick Setup
+
+```bash
+# Setup common development runtimes
+task mise-setup
+
+# Or install specific runtimes
+task mise-install -- node@lts
+task mise-install -- python@3.12
+task mise-install -- go@latest
+```
+
+### Using Mise
+
+```bash
+# List available versions
+task shell
+mise ls-remote node
+
+# Install specific version
+mise install node@20.10.0
+
+# Set global version
+mise use -g node@20.10.0
+
+# Set local version for project
+mise use node@18.18.0
+
+# List installed versions
+mise ls
+```
+
+### Project-specific Versions
+
+Create a `.tool-versions` file in your project:
+
+```
+nodejs 20.10.0
+python 3.12.1
+golang 1.21.5
+```
+
+Mise will automatically switch to these versions when you enter the directory.
+
+### Mise Configuration
+
+The mise configuration is stored in `docker/mise/.mise.toml`:
+
+- Global settings and preferences
+- Tool aliases (e.g., `lts` → `20` for Node.js)
+- Environment variables
+- Default tools to install
+
 ### Zinit Plugin Management
 
-Zinit automatically manages plugin installation, updates, and loading. All plugins are configured in `.zinit-config` with turbo-mode loading for fast startup times.
+Zinit automatically manages plugin installation, updates, and loading. All plugins are configured in `.zinit_config` with turbo-mode loading for fast startup times.
 
 ### Local Configuration
 

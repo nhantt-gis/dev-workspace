@@ -28,33 +28,42 @@ RUN dnf update -y && \
         which \
         procps-ng \
         net-tools \
-        sudo \
+        sudo && \
     dnf clean all
 
 # Install neovim
 RUN curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz && \
     rm -rf /opt/nvim && \
-    tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+    tar -C /opt -xzf nvim-linux-x86_64.tar.gz && \
+    rm nvim-linux-x86_64.tar.gz
 
-# Install Zinit
+# Install zinit (zsh plugin manager)
 RUN bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
+
+# Install mise (runtime version manager)
+RUN curl https://mise.run | sh
 
 # Create non-root user
 RUN useradd -m -s /bin/zsh $USER && \
     usermod -aG wheel $USER && \
     echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
+# Create directories as root and set permissions
+RUN mkdir -p /home/$USER/.local/share /home/$USER/.config /home/$USER/.local/bin && \
+    chown -R $USER:$USER /home/$USER
+
 # Switch to non-root user
 USER $USER
 WORKDIR $HOME
 
-# Create necessary directories
-RUN mkdir -p $HOME/.local/share $HOME/.config
-
 # Copy ZSH configuration files
 COPY --chown=$USER:$USER docker/zsh/.zshrc $HOME/.zshrc
 COPY --chown=$USER:$USER docker/zsh/.zsh_aliases $HOME/.zsh_aliases
-COPY --chown=$USER:$USER docker/zsh/.zinit-config $HOME/.zinit-config
+COPY --chown=$USER:$USER docker/zsh/.zinit_config $HOME/.zinit_config
+COPY --chown=$USER:$USER docker/zsh/starship.toml $HOME/.config/starship.toml
+
+# Copy mise configuration
+COPY --chown=$USER:$USER docker/mise/.mise.toml $HOME/.config/mise/config.toml
 
 # Create workspace directory as root first
 USER root

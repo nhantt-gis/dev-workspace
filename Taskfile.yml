@@ -57,4 +57,29 @@ tasks:
     desc: Clean up containers and images
     cmds:
       - docker compose down -v --rmi all
+  
+  mise:
+    desc: Run mise commands in container
+    cmds:
+      - docker compose exec devenv mise {{.CLI_ARGS}}
+    
+  mise-install:
+    desc: Install runtime with mise (e.g., task mise-install -- node@lts)
+    cmds:
+      - docker compose exec devenv mise install {{.CLI_ARGS}}
+      
+  mise-use:
+    desc: Set runtime version globally (e.g., task mise-use -- node@lts)
+    cmds:
+      - docker compose exec devenv mise use -g {{.CLI_ARGS}}
+      
+  mise-list:
+    desc: List installed runtimes
+    cmds:
+      - docker compose exec devenv mise ls
+      
+  mise-setup:
+    desc: Setup common development runtimes (Node.js, Python, Go)
+    cmds:
+      - docker compose exec devenv mise-helper setup
     
